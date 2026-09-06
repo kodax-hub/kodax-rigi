@@ -66,10 +66,13 @@ export function AnonymizerApp() {
     [customTermsRaw],
   );
 
-  const matches = useMemo(
-    () => (doc ? analyze(doc.text, toggles, customTerms) : []),
-    [doc, toggles, customTerms],
-  );
+  const matches = useMemo(() => {
+    if (!doc) return [];
+    if (nerRaw.length === 0) return analyze(doc.text, toggles, customTerms);
+    const rules = detectAll(doc.text, toggles, customTerms);
+    const ai = nerRaw.filter((m) => toggles[m.category]);
+    return buildMatches(resolveOverlaps([...rules, ...ai]));
+  }, [doc, toggles, customTerms, nerRaw]);
 
   const redacted = useMemo(
     () => (doc ? applyRedaction(doc.text, matches, disabled) : ""),
