@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Copy, Download, FileJson, KeyRound, Loader2, ShieldCheck, Trash2, WifiOff } from "lucide-react";
+import { Copy, Download, FileJson, Info, KeyRound, Loader2, ShieldCheck, Trash2, WifiOff, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { Dropzone } from "@/components/Dropzone";
@@ -36,6 +36,7 @@ export function AnonymizerApp() {
   const loadedSettings = useRef(false);
   const [nerRaw, setNerRaw] = useState<RawMatch[]>([]);
   const [nerStatus, setNerStatus] = useState<NerStatus>("idle");
+  const [infoOpen, setInfoOpen] = useState(false);
 
   useEffect(() => {
     setSubject((s) => (s.uid ? s : { ...s, uid: generateUid() }));
@@ -162,6 +163,14 @@ export function AnonymizerApp() {
           <span className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 font-mono text-xs text-muted-foreground">
             <WifiOff className="size-3.5" aria-hidden /> 100 % offline
           </span>
+          <button
+            type="button"
+            onClick={() => setInfoOpen(true)}
+            className="inline-flex items-center justify-center rounded-full border border-border p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+            aria-label="Informationen zur App und zum KI-Modell"
+          >
+            <Info className="size-4 pointer-events-none" aria-hidden />
+          </button>
         </div>
       </header>
 
@@ -301,6 +310,91 @@ export function AnonymizerApp() {
           )}
         </section>
       </main>
+
+      {infoOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 p-4 pt-20 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Informationen"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setInfoOpen(false);
+          }}
+        >
+          <div className="w-full max-w-xl rounded-2xl border border-border bg-card p-6 shadow-2xl">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h2 className="font-mono text-lg font-semibold text-foreground">Anonymo</h2>
+                <p className="text-sm text-muted-foreground">
+                  Lokale PDF- und Bild-Anonymisierung
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setInfoOpen(false)}
+                className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                aria-label="Schliessen"
+              >
+                <X className="size-5" aria-hidden />
+              </button>
+            </div>
+
+            <div className="mt-6 space-y-5 text-sm text-foreground">
+              <section>
+                <h3 className="mb-2 flex items-center gap-2 font-mono font-semibold text-primary">
+                  <ShieldCheck className="size-4" aria-hidden />
+                  Verwendetes KI-Modell
+                </h3>
+                <p className="text-muted-foreground">
+                  <strong className="text-foreground">Davlan/bert-base-multilingual-cased-ner-hrl</strong>{" "}
+                  – ein mehrsprachiges BERT-Modell von Hugging Face für Named Entity Recognition
+                  (NER), trainiert auf Personen, Organisationen, Orten und Daten.
+                </p>
+              </section>
+
+              <section className="grid gap-3 sm:grid-cols-2">
+                <div className="rounded-lg border border-border bg-background p-3">
+                  <p className="text-xs text-muted-foreground">Architektur</p>
+                  <p className="font-medium">BERT base</p>
+                  <p className="text-xs text-muted-foreground">12 Layer · 768 Hidden · 12 Heads</p>
+                </div>
+                <div className="rounded-lg border border-border bg-background p-3">
+                  <p className="text-xs text-muted-foreground">Parameter</p>
+                  <p className="font-medium">ca. 110 Mio.</p>
+                  <p className="text-xs text-muted-foreground">Vokabular: 119.547 Tokens</p>
+                </div>
+                <div className="rounded-lg border border-border bg-background p-3">
+                  <p className="text-xs text-muted-foreground">Lokale Grösse</p>
+                  <p className="font-medium">ca. 170 MB</p>
+                  <p className="text-xs text-muted-foreground">8-bit quantisiert (q8 ONNX)</p>
+                </div>
+                <div className="rounded-lg border border-border bg-background p-3">
+                  <p className="text-xs text-muted-foreground">Erkennt</p>
+                  <p className="font-medium">PER, ORG, LOC, DATE</p>
+                  <p className="text-xs text-muted-foreground">Personen, Firmen, Orte, Daten</p>
+                </div>
+              </section>
+
+              <section>
+                <h3 className="mb-2 font-mono font-semibold text-primary">100 % offline</h3>
+                <p className="text-muted-foreground">
+                  Alle Berechnungen laufen lokal in deinem Browser oder in der Desktop-App. Weder
+                  das Dokument noch das KI-Modell laden etwas aus der Cloud hoch oder aus dem
+                  Internet herunter.
+                </p>
+              </section>
+
+              <section>
+                <h3 className="mb-2 font-mono font-semibold text-primary">Wichtiger Hinweis</h3>
+                <p className="text-muted-foreground">
+                  Keine automatische Erkennung ist perfekt. Prüfe das Ergebnis vor dem Weitergeben
+                  und nutze die eigene Begriffsliste für alles, was zusätzlich verschwinden soll.
+                </p>
+              </section>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
