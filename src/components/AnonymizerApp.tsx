@@ -6,7 +6,8 @@ import { Dropzone } from "@/components/Dropzone";
 import { CategoryControls } from "@/components/CategoryControls";
 import { SubjectPanel } from "@/components/SubjectPanel";
 import { OriginalPane, RedactedPane } from "@/components/TextPanes";
-import { analyze, applyRedaction } from "@/lib/redaction/detect";
+import { analyze, applyRedaction, buildMatches, detectAll, resolveOverlaps, type RawMatch } from "@/lib/redaction/detect";
+import type { NerStatus } from "@/lib/ner/ner";
 import {
   buildAnonymizedExport,
   buildKeyMapExport,
@@ -33,6 +34,8 @@ export function AnonymizerApp() {
   const [progress, setProgress] = useState<ExtractProgress | null>(null);
   const [disabled, setDisabled] = useState<Set<string>>(new Set());
   const loadedSettings = useRef(false);
+  const [nerRaw, setNerRaw] = useState<RawMatch[]>([]);
+  const [nerStatus, setNerStatus] = useState<NerStatus>("idle");
 
   useEffect(() => {
     setSubject((s) => (s.uid ? s : { ...s, uid: generateUid() }));
@@ -63,10 +66,13 @@ export function AnonymizerApp() {
     [customTermsRaw],
   );
 
-  const matches = useMemo(
-    () => (doc ? analyze(doc.text, toggles, customTerms) : []),
-    [doc, toggles, customTerms],
-  );
+  const matches = useMemo(() => {
+    if (!doc) return [];
+    if (nerRaw.length === 0) return analyze(doc.text, toggles, customTerms);
+    const rules = detectAll(doc.text, toggles, customTerms);
+    const ai = nerRaw.filter((m) => toggles[m.category]);
+    return buildMatches(resolveOverlaps([...rules, ...ai]));
+  }, [doc, toggles, customTerms, nerRaw]);
 
   const redacted = useMemo(
     () => (doc ? applyRedaction(doc.text, matches, disabled) : ""),
@@ -83,16 +89,28 @@ export function AnonymizerApp() {
     const { extractText } = await import("@/lib/extract/extract");
     const texts: string[] = [];
     setDisabled(new Set());
+    setNerRaw([]);
     try {
       for (const file of files) {
         setProgress({ stage: "pdf", message: `${file.name} wird gelesen…`, progress: 0 });
         const text = await extractText(file, setProgress);
         texts.push(files.length > 1 ? `--- ${file.name} ---\n${text}` : text);
       }
+      const fullText = texts.join("\n\n").trim();
       setDoc({
         fileName: files.map((f) => f.name).join(", "),
-        text: texts.join("\n\n").trim(),
+        text: fullText,
       });
+
+      // KI-Erkennung im Anschluss – rein lokal, ohne Netzwerk.
+      setProgress({
+        stage: "ocr",
+        message: "KI prüft den Text auf Namen, Firmen und Orte…",
+        progress: 0.5,
+      });
+      const { detectEntities } = await import("@/lib/ner/ner");
+      const entities = await detectEntities(fullText, setNerStatus);
+      setNerRaw(entities);
     } catch (err) {
       console.error(err);
       toast.error("Datei konnte nicht gelesen werden.");
@@ -102,6 +120,7 @@ export function AnonymizerApp() {
   }, []);
 
   const activeCount = matches.filter((m) => !disabled.has(m.id)).length;
+
 
   const exportBase = useMemo(() => {
     const name = subject.label.trim() || subject.uid || "dokument";
@@ -186,6 +205,8 @@ export function AnonymizerApp() {
               <div className="flex flex-wrap items-center gap-3">
                 <p className="flex-1 truncate font-mono text-xs text-muted-foreground">
                   {doc.fileName} · {activeCount} von {matches.length} Fundstellen ersetzt
+                  {nerStatus === "ready" && nerRaw.length > 0 && " · inkl. KI-Erkennung"}
+                  {nerStatus === "error" && " · KI nicht verfügbar"}
                 </p>
                 <button
                   type="button"
