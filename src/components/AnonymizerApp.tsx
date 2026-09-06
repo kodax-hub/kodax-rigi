@@ -6,7 +6,8 @@ import kodaxIcon from "@/assets/kodax-white-icon.svg";
 import { Dropzone } from "@/components/Dropzone";
 import { CategoryControls } from "@/components/CategoryControls";
 import { SubjectPanel } from "@/components/SubjectPanel";
-import { OriginalPane, RedactedPane } from "@/components/TextPanes";
+import { OriginalPane, RedactedPane, type SelectionInfo } from "@/components/TextPanes";
+import { detectManual, dropOverlapping, type ManualTerm } from "@/lib/redaction/manual";
 import { analyze, applyRedaction, buildMatches, detectAll, resolveOverlaps, type RawMatch } from "@/lib/redaction/detect";
 import type { NerStatus } from "@/lib/ner/ner";
 import {
@@ -17,7 +18,7 @@ import {
   slugify,
   type Subject,
 } from "@/lib/redaction/export";
-import { DEFAULT_TOGGLES, type Category, type CategoryToggles } from "@/lib/redaction/types";
+import { CATEGORIES, DEFAULT_TOGGLES, type Category, type CategoryToggles } from "@/lib/redaction/types";
 import type { ExtractProgress } from "@/lib/extract/extract";
 
 const STORAGE_KEY = "anonymo.settings.v1";
@@ -38,6 +39,8 @@ export function AnonymizerApp() {
   const [nerRaw, setNerRaw] = useState<RawMatch[]>([]);
   const [nerStatus, setNerStatus] = useState<NerStatus>("idle");
   const [infoOpen, setInfoOpen] = useState(false);
+  const [manualTerms, setManualTerms] = useState<ManualTerm[]>([]);
+  const [selection, setSelection] = useState<SelectionInfo | null>(null);
 
   useEffect(() => {
     setSubject((s) => (s.uid ? s : { ...s, uid: generateUid() }));
@@ -94,6 +97,7 @@ export function AnonymizerApp() {
     const texts: string[] = [];
     setDisabled(new Set());
     setNerRaw([]);
+    setManualTerms([]);
     try {
       for (const file of files) {
         setProgress({ stage: "pdf", message: `${file.name} wird gelesen…`, progress: 0 });
@@ -124,6 +128,26 @@ export function AnonymizerApp() {
   }, []);
 
   const activeCount = matches.filter((m) => !disabled.has(m.id)).length;
+
+  const assignSelection = useCallback(
+    (category: Category) => {
+      if (!selection) return;
+      const value = selection.value;
+      setManualTerms((prev) => {
+        if (prev.some((t) => t.value.toLowerCase() === value.toLowerCase())) {
+          return prev.map((t) =>
+            t.value.toLowerCase() === value.toLowerCase() ? { ...t, category } : t,
+          );
+        }
+        return [...prev, { id: `${Date.now()}-${value}`, value, category }];
+      });
+      setToggles((t) => (t[category] ? t : { ...t, [category]: true }));
+      setSelection(null);
+      window.getSelection()?.removeAllRanges();
+      toast.success(`„${value}" als ${CATEGORIES.find((c) => c.id === category)?.label} markiert`);
+    },
+    [selection],
+  );
 
 
   const exportBase = useMemo(() => {
@@ -265,6 +289,7 @@ export function AnonymizerApp() {
                   onClick={() => {
                     setDoc(null);
                     setDisabled(new Set());
+                    setManualTerms([]);
                   }}
                   className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary"
                 >
@@ -275,13 +300,14 @@ export function AnonymizerApp() {
               <div className="grid gap-4 xl:grid-cols-2">
                 <div className="rounded-xl border border-border bg-card">
                   <h2 className="border-b border-border px-4 py-2 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                    Original – Fundstelle anklicken zum Abwählen
+                    Original – markieren zum Zuordnen, Fundstelle anklicken zum Abwählen
                   </h2>
                   <div className="max-h-[60vh] overflow-auto p-4">
                     <OriginalPane
                       text={doc.text}
                       matches={matches}
                       disabled={disabled}
+                      onSelect={setSelection}
                       onToggleMatch={(id) =>
                         setDisabled((prev) => {
                           const next = new Set(prev);
