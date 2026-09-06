@@ -36,6 +36,7 @@ export function AnonymizerApp() {
   const loadedSettings = useRef(false);
   const [nerRaw, setNerRaw] = useState<RawMatch[]>([]);
   const [nerStatus, setNerStatus] = useState<NerStatus>("idle");
+  const [infoOpen, setInfoOpen] = useState(false);
 
   useEffect(() => {
     setSubject((s) => (s.uid ? s : { ...s, uid: generateUid() }));
