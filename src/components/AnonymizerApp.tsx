@@ -189,14 +189,29 @@ export function AnonymizerApp() {
                 </p>
                 <button
                   type="button"
+                  onClick={handleExportJson}
+                  className="inline-flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+                >
+                  <FileJson className="size-4" aria-hidden /> JSON exportieren
+                </button>
+                <button
+                  type="button"
+                  onClick={handleExportKeyMap}
+                  className="inline-flex items-center gap-2 rounded-lg border border-accent/50 px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
+                >
+                  <KeyRound className="size-4" aria-hidden /> Schlüsseldatei
+                </button>
+                <button
+                  type="button"
                   onClick={() => {
                     navigator.clipboard.writeText(redacted);
                     toast.success("Anonymisierter Text kopiert");
                   }}
-                  className="inline-flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+                  className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
                 >
                   <Copy className="size-4" aria-hidden /> Kopieren
                 </button>
+
                 <button
                   type="button"
                   onClick={() => {
