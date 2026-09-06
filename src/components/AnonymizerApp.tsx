@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Copy, Download, FileJson, KeyRound, Loader2, ShieldCheck, Trash2, WifiOff } from "lucide-react";
+import { Copy, Download, FileJson, Info, KeyRound, Loader2, ShieldCheck, Trash2, WifiOff, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { Dropzone } from "@/components/Dropzone";
