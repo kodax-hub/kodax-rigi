@@ -103,6 +103,30 @@ export function AnonymizerApp() {
 
   const activeCount = matches.filter((m) => !disabled.has(m.id)).length;
 
+  const exportBase = useMemo(() => {
+    const name = subject.label.trim() || subject.uid || "dokument";
+    return `${slugify(name)}-${subject.uid || "ohne-uid"}`;
+  }, [subject]);
+
+  const handleExportJson = useCallback(() => {
+    if (!doc) return;
+    downloadJson(
+      buildAnonymizedExport({ subject, fileName: doc.fileName, redacted, matches, disabled }),
+      `${exportBase}.json`,
+    );
+    toast.success("Anonymisierte JSON-Datei gespeichert");
+  }, [doc, subject, redacted, matches, disabled, exportBase]);
+
+  const handleExportKeyMap = useCallback(() => {
+    if (!doc) return;
+    downloadJson(
+      buildKeyMapExport({ subject, fileName: doc.fileName, matches, disabled }),
+      `${exportBase}-schluessel.json`,
+    );
+    toast.warning("Schlüsseldatei gespeichert – enthält Klartext, sicher aufbewahren");
+  }, [doc, subject, matches, disabled, exportBase]);
+
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-card/60">
