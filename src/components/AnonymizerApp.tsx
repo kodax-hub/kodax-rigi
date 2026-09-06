@@ -89,16 +89,28 @@ export function AnonymizerApp() {
     const { extractText } = await import("@/lib/extract/extract");
     const texts: string[] = [];
     setDisabled(new Set());
+    setNerRaw([]);
     try {
       for (const file of files) {
         setProgress({ stage: "pdf", message: `${file.name} wird gelesen…`, progress: 0 });
         const text = await extractText(file, setProgress);
         texts.push(files.length > 1 ? `--- ${file.name} ---\n${text}` : text);
       }
+      const fullText = texts.join("\n\n").trim();
       setDoc({
         fileName: files.map((f) => f.name).join(", "),
-        text: texts.join("\n\n").trim(),
+        text: fullText,
       });
+
+      // KI-Erkennung im Anschluss – rein lokal, ohne Netzwerk.
+      setProgress({
+        stage: "ocr",
+        message: "KI prüft den Text auf Namen, Firmen und Orte…",
+        progress: 0.5,
+      });
+      const { detectEntities } = await import("@/lib/ner/ner");
+      const entities = await detectEntities(fullText, setNerStatus);
+      setNerRaw(entities);
     } catch (err) {
       console.error(err);
       toast.error("Datei konnte nicht gelesen werden.");
@@ -106,6 +118,9 @@ export function AnonymizerApp() {
       setProgress(null);
     }
   }, []);
+
+  const activeCount = matches.filter((m) => !disabled.has(m.id)).length;
+
 
   const activeCount = matches.filter((m) => !disabled.has(m.id)).length;
 
