@@ -31,3 +31,6 @@ dist-ssr
 *.sln
 *.sw?
 electron-release
+
+# Local AI model (too large for repo, needed for offline packaging)
+public/bert-ner/
