@@ -157,7 +157,7 @@ export function AnonymizerApp() {
             <h1 className="text-lg font-medium tracking-tight text-foreground">
               Kodax Secure AI <span className="text-gold">„Rigi“</span>
             </h1>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground/60">
               (BERT-base multilingual NER · 110 Mio. Parameter · 8-bit quantisiert)
             </p>
           </div>
