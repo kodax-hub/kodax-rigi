@@ -169,7 +169,7 @@ export function AnonymizerApp() {
             className="inline-flex items-center justify-center rounded-full border border-border p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
             aria-label="Informationen zur App und zum KI-Modell"
           >
-            <Info className="size-4" aria-hidden />
+            <Info className="size-4 pointer-events-none" aria-hidden />
           </button>
         </div>
       </header>
