@@ -1,5 +1,6 @@
 export type Category =
   | "name"
+  | "company"
   | "iban"
   | "address"
   | "email"
@@ -18,6 +19,12 @@ export interface CategoryMeta {
 
 export const CATEGORIES: CategoryMeta[] = [
   { id: "name", label: "Namen", placeholder: "NAME", description: "Anreden, Vor- und Nachnamen" },
+  {
+    id: "company",
+    label: "Firmen & Organisationen",
+    placeholder: "FIRMA",
+    description: "GmbH, AG, Vereine, Clubs u. a.",
+  },
   { id: "iban", label: "IBAN", placeholder: "IBAN", description: "Mit Prüfziffernkontrolle" },
   { id: "address", label: "Adressen", placeholder: "ADRESSE", description: "Strasse, PLZ und Ort" },
   { id: "email", label: "E-Mail", placeholder: "EMAIL", description: "E-Mail-Adressen" },
@@ -46,6 +53,7 @@ export type CategoryToggles = Record<Category, boolean>;
 
 export const DEFAULT_TOGGLES: CategoryToggles = {
   name: true,
+  company: true,
   iban: true,
   address: true,
   email: true,
