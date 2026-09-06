@@ -6,7 +6,8 @@ import { Dropzone } from "@/components/Dropzone";
 import { CategoryControls } from "@/components/CategoryControls";
 import { SubjectPanel } from "@/components/SubjectPanel";
 import { OriginalPane, RedactedPane } from "@/components/TextPanes";
-import { analyze, applyRedaction } from "@/lib/redaction/detect";
+import { analyze, applyRedaction, buildMatches, detectAll, resolveOverlaps, type RawMatch } from "@/lib/redaction/detect";
+import type { NerStatus } from "@/lib/ner/ner";
 import {
   buildAnonymizedExport,
   buildKeyMapExport,
@@ -33,6 +34,8 @@ export function AnonymizerApp() {
   const [progress, setProgress] = useState<ExtractProgress | null>(null);
   const [disabled, setDisabled] = useState<Set<string>>(new Set());
   const loadedSettings = useRef(false);
+  const [nerRaw, setNerRaw] = useState<RawMatch[]>([]);
+  const [nerStatus, setNerStatus] = useState<NerStatus>("idle");
 
   useEffect(() => {
     setSubject((s) => (s.uid ? s : { ...s, uid: generateUid() }));
