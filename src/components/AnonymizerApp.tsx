@@ -1,11 +1,20 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Copy, Download, Loader2, ShieldCheck, Trash2, WifiOff } from "lucide-react";
+import { Copy, Download, FileJson, KeyRound, Loader2, ShieldCheck, Trash2, WifiOff } from "lucide-react";
 import { toast } from "sonner";
 
 import { Dropzone } from "@/components/Dropzone";
 import { CategoryControls } from "@/components/CategoryControls";
+import { SubjectPanel } from "@/components/SubjectPanel";
 import { OriginalPane, RedactedPane } from "@/components/TextPanes";
 import { analyze, applyRedaction } from "@/lib/redaction/detect";
+import {
+  buildAnonymizedExport,
+  buildKeyMapExport,
+  downloadJson,
+  generateUid,
+  slugify,
+  type Subject,
+} from "@/lib/redaction/export";
 import { DEFAULT_TOGGLES, type Category, type CategoryToggles } from "@/lib/redaction/types";
 import type { ExtractProgress } from "@/lib/extract/extract";
 
@@ -19,10 +28,16 @@ interface DocState {
 export function AnonymizerApp() {
   const [toggles, setToggles] = useState<CategoryToggles>(DEFAULT_TOGGLES);
   const [customTermsRaw, setCustomTermsRaw] = useState("");
+  const [subject, setSubject] = useState<Subject>({ uid: "", label: "" });
   const [doc, setDoc] = useState<DocState | null>(null);
   const [progress, setProgress] = useState<ExtractProgress | null>(null);
   const [disabled, setDisabled] = useState<Set<string>>(new Set());
   const loadedSettings = useRef(false);
+
+  useEffect(() => {
+    setSubject((s) => (s.uid ? s : { ...s, uid: generateUid() }));
+  }, []);
+
 
   useEffect(() => {
     try {
