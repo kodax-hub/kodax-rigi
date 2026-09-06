@@ -163,6 +163,14 @@ export function AnonymizerApp() {
           <span className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 font-mono text-xs text-muted-foreground">
             <WifiOff className="size-3.5" aria-hidden /> 100 % offline
           </span>
+          <button
+            type="button"
+            onClick={() => setInfoOpen(true)}
+            className="inline-flex items-center justify-center rounded-full border border-border p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+            aria-label="Informationen zur App und zum KI-Modell"
+          >
+            <Info className="size-4" aria-hidden />
+          </button>
         </div>
       </header>
 
