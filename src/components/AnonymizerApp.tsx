@@ -148,6 +148,12 @@ export function AnonymizerApp() {
 
       <main className="mx-auto grid max-w-7xl gap-6 px-6 py-6 lg:grid-cols-[300px_1fr]">
         <aside className="space-y-6">
+          <SubjectPanel
+            subject={subject}
+            onChange={setSubject}
+            onRegenerate={() => setSubject((s) => ({ ...s, uid: generateUid() }))}
+          />
+
           <CategoryControls
             toggles={toggles}
             counts={counts}
