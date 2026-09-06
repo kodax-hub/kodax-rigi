@@ -4,13 +4,13 @@ import { AnonymizerApp } from "@/components/AnonymizerApp";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Anonymo – Dokumente offline anonymisieren" },
+      { title: "Kodax Secure AI „Rigi“ – Dokumente offline anonymisieren" },
       {
         name: "description",
         content:
-          "Desktop-App, die PDFs und Bilder per Drag & Drop einliest, Text lokal erkennt und Namen, IBANs sowie Adressen zu 100 % offline anonymisiert.",
+          "Kodax-Desktop-App, die PDFs und Bilder per Drag & Drop einliest, Text lokal erkennt und Namen, IBANs sowie Adressen zu 100 % offline anonymisiert.",
       },
-      { property: "og:title", content: "Anonymo – Dokumente offline anonymisieren" },
+      { property: "og:title", content: "Kodax Secure AI „Rigi“ – Dokumente offline anonymisieren" },
       {
         property: "og:description",
         content:

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Copy, Download, FileJson, Info, KeyRound, Loader2, ShieldCheck, Trash2, WifiOff, X } from "lucide-react";
 import { toast } from "sonner";
 
+import kodaxIcon from "@/assets/kodax-white-icon.svg";
 import { Dropzone } from "@/components/Dropzone";
 import { CategoryControls } from "@/components/CategoryControls";
 import { SubjectPanel } from "@/components/SubjectPanel";
@@ -323,11 +324,16 @@ export function AnonymizerApp() {
         >
           <div className="w-full max-w-xl rounded-2xl border border-border bg-card p-6 shadow-2xl">
             <div className="flex items-start justify-between gap-4">
-              <div>
-                <h2 className="font-mono text-lg font-semibold text-foreground">Anonymo</h2>
-                <p className="text-sm text-muted-foreground">
-                  Lokale PDF- und Bild-Anonymisierung
-                </p>
+              <div className="flex items-center gap-3">
+                <img src={kodaxIcon} alt="Kodax Logo" className="h-8 w-auto" />
+                <div>
+                  <h2 className="text-lg font-medium text-foreground">
+                    Kodax Secure AI <span className="text-gold">„Rigi“</span>
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    Lokale PDF- und Bild-Anonymisierung
+                  </p>
+                </div>
               </div>
               <button
                 type="button"
