@@ -94,23 +94,42 @@ export async function extractText(file: File, onProgress: ProgressFn): Promise<s
     return joined;
   }
 
-  // Kein Textlayer -> OCR über gerenderte Seiten
-  const canvases: HTMLCanvasElement[] = [];
-  const maxPages = Math.min(doc.numPages, 20);
-  for (let p = 1; p <= maxPages; p++) {
-    const page = await doc.getPage(p);
-    const viewport = page.getViewport({ scale: 2 });
-    const canvas = document.createElement("canvas");
-    canvas.width = viewport.width;
-    canvas.height = viewport.height;
-    await page.render({
-      canvas,
-      canvasContext: canvas.getContext("2d")!,
-      viewport,
-    }).promise;
-    canvases.push(canvas);
+  // Kein Textlayer -> OCR über gerenderte Seiten (alle Seiten, eine nach der anderen)
+  const { createWorker } = await import("tesseract.js");
+  const worker = await createWorker(["deu", "eng"], 1, {
+    workerPath: `${TESS_BASE}/worker.min.js`,
+    corePath: TESS_BASE,
+    langPath: `${TESS_BASE}/tessdata`,
+    gzip: true,
+  });
+  const parts: string[] = [];
+  try {
+    for (let p = 1; p <= doc.numPages; p++) {
+      onProgress({
+        stage: "ocr",
+        message: `Texterkennung Seite ${p} von ${doc.numPages}…`,
+        progress: (p - 1) / doc.numPages,
+      });
+      const page = await doc.getPage(p);
+      const viewport = page.getViewport({ scale: 2 });
+      const canvas = document.createElement("canvas");
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+      await page.render({
+        canvas,
+        canvasContext: canvas.getContext("2d")!,
+        viewport,
+      }).promise;
+      const { data: res } = await worker.recognize(canvas);
+      parts.push(res.text);
+      canvas.width = 0;
+      canvas.height = 0;
+      page.cleanup();
+    }
+  } finally {
+    await worker.terminate();
   }
-  const text = await ocrCanvases(canvases, onProgress);
   onProgress({ stage: "done", message: "Fertig", progress: 1 });
-  return text;
+  return parts.join("\n\n");
 }
+
