@@ -1,8 +1,16 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
 
 @custom-variant dark (&:is(.dark *));
+
+/*
+ * Kodax brand palette (aligned with Kodax Evolve website):
+ * marine / marine-deep blues, sand neutrals, gold accent.
+ * Dark-only app: the Kodax dark scheme is the default in :root.
+ */
 
 /*
  * Design system definition.
