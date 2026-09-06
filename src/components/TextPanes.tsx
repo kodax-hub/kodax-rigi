@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import type { Match } from "@/lib/redaction/types";
 
 const COLORS: Record<string, string> = {
@@ -13,14 +14,34 @@ const COLORS: Record<string, string> = {
   custom: "bg-[oklch(0.65_0.16_80)]/30 text-foreground",
 };
 
+export interface SelectionInfo {
+  value: string;
+  x: number;
+  y: number;
+}
+
 interface Props {
   text: string;
   matches: Match[];
   disabled: Set<string>;
   onToggleMatch: (id: string) => void;
+  onSelect?: (info: SelectionInfo | null) => void;
 }
 
-export function OriginalPane({ text, matches, disabled, onToggleMatch }: Props) {
+export function OriginalPane({ text, matches, disabled, onToggleMatch, onSelect }: Props) {
+  const handleMouseUp = useCallback(() => {
+    if (!onSelect) return;
+    const sel = window.getSelection();
+    const raw = sel?.toString() ?? "";
+    const value = raw.replace(/\s+/g, " ").trim();
+    if (!sel || sel.rangeCount === 0 || value.length < 2) {
+      onSelect(null);
+      return;
+    }
+    const rect = sel.getRangeAt(0).getBoundingClientRect();
+    onSelect({ value, x: rect.left + rect.width / 2, y: rect.bottom });
+  }, [onSelect]);
+
   const parts: React.ReactNode[] = [];
   let cursor = 0;
   const sorted = [...matches].sort((a, b) => a.start - b.start);
@@ -33,7 +54,7 @@ export function OriginalPane({ text, matches, disabled, onToggleMatch }: Props) 
         key={m.id}
         type="button"
         onClick={() => onToggleMatch(m.id)}
-        title={off ? "Wieder anonymisieren" : "Diese Stelle sichtbar lassen"}
+        title={`${m.placeholder} – ${off ? "wieder anonymisieren" : "sichtbar lassen"}`}
         className={`rounded px-0.5 transition-colors ${
           off ? "line-through opacity-50 bg-secondary" : COLORS[m.category]
         }`}
@@ -46,7 +67,10 @@ export function OriginalPane({ text, matches, disabled, onToggleMatch }: Props) 
   parts.push(text.slice(cursor));
 
   return (
-    <pre className="whitespace-pre-wrap break-words font-mono text-[13px] leading-relaxed text-foreground">
+    <pre
+      onMouseUp={handleMouseUp}
+      className="whitespace-pre-wrap break-words font-mono text-[13px] leading-relaxed text-foreground"
+    >
       {parts}
     </pre>
   );
