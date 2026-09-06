@@ -12,7 +12,7 @@
     "format": "prettier --write .",
     "desktop:build": "vite build --config electron/vite.electron.config.ts",
     "desktop:start": "electron .",
-    "desktop:pack": "npm run desktop:build && electron-packager . Anonymo --platform=win32,darwin --arch=x64 --out=electron-release --overwrite --ignore=node_modules --ignore=^/src --ignore=^/public --ignore=^/electron-release",
+    "desktop:pack": "npm run desktop:build && electron-packager . KodaxSecureAIRigi --platform=win32,darwin --arch=x64 --out=electron-release --overwrite --ignore=node_modules --ignore=^/src --ignore=^/public --ignore=^/electron-release",
     "test": "vitest run"
   },
   "overrides": {
