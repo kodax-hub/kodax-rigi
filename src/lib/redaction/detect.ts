@@ -163,6 +163,50 @@ export function detectAll(
     scan(text, "address", /\bPostfach\s\d{1,6}\b/gi, out);
   }
 
+  if (enabled.company) {
+    // Legal-form suffixes: "Muster GmbH", "Beispiel Holding AG", "Müller & Co. KG"
+    scan(
+      text,
+      "company",
+      new RegExp(
+        `\\b${CAP}(?:[- ]${CAP}){0,2}\\s(?:&\\s?(?:Co\\.?|Söhne|Soehne|Partner)\\s)?(?:GmbH(?:\\s?&\\s?Co\\.?\\s?KG)?|AG|KG|KGaA|OHG|mbH|UG(?:\\s?\\(haftungsbeschränkt\\))?|e\\.\\s?V\\.|eV|SE|Ltd\\.?|Inc\\.?|LLC|Sàrl|SARL)\\b`,
+        "g",
+      ),
+      out,
+    );
+    // Bare legal forms preceded by "der/die Firma ..." style contexts are covered above;
+    // club-type prefixes followed by a name: "FC X", "SV Y", "1. FSV Z"
+    scan(
+      text,
+      "company",
+      new RegExp(
+        `\\b(?:\\d+\\.\\s)?(?:FC|SC|SV|TSV|VfB|VfL|BVB|HSV|FSV|BC|AC|AS|SSV|SpVgg|BV|FK|SK|ESV|DJK|TV)\\s${CAP}(?:[- ]${CAP}){0,2}\\b`,
+        "g",
+      ),
+      out,
+    );
+    // "... Verein", "... Club", "... Klub" and explicit "Sportverein X" etc.
+    scan(
+      text,
+      "company",
+      new RegExp(
+        `\\b(?:${CAP}(?:[- ]?${CAP}){0,2}\\s)?(?:Sportverein|Fussballclub|Fußballclub|Fussballklub|Fußballklub|Sportclub|Sportklub|Turnverein|Verein|Club|Klub)(?:\\s${CAP}(?:[- ]?${CAP}){0,2})?\\b`,
+        "g",
+      ),
+      out,
+    );
+    // "Bank"/"Versicherung"/"Krankenkasse" style institutions
+    scan(
+      text,
+      "company",
+      new RegExp(
+        `\\b${CAP}(?:[- ]?${CAP}){0,2}\\s(?:bank|Versicherung(?:s(?:\\s?-?\\s?${CAP})?)?|Krankenkasse|Sparkasse|Volksbank|Raiffeisenbank|Kantonalbank|Versicherungs-AG)\\b`,
+        "g",
+      ),
+      out,
+    );
+  }
+
   if (enabled.name) {
     scan(text, "name", new RegExp(`\\b${TITLE}\\s(?:${CAP}\\s)?${CAP}\\b`, "g"), out);
     // First name from list followed by a capitalised surname
@@ -201,6 +245,7 @@ const PRIORITY: Category[] = [
   "custom",
   "address",
   "phone",
+  "company",
   "name",
   "birthdate",
 ];
@@ -236,6 +281,7 @@ export function buildMatches(raw: RawMatch[]): Match[] {
   const assigned = new Map<string, string>();
   const labels: Record<Category, string> = {
     name: "NAME",
+    company: "FIRMA",
     iban: "IBAN",
     address: "ADRESSE",
     email: "EMAIL",

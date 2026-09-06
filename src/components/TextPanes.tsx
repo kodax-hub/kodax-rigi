@@ -2,6 +2,7 @@ import type { Match } from "@/lib/redaction/types";
 
 const COLORS: Record<string, string> = {
   name: "bg-[oklch(0.55_0.14_190)]/30 text-foreground",
+  company: "bg-[oklch(0.58_0.15_330)]/30 text-foreground",
   iban: "bg-[oklch(0.6_0.16_55)]/30 text-foreground",
   address: "bg-[oklch(0.55_0.13_300)]/30 text-foreground",
   email: "bg-[oklch(0.6_0.14_150)]/30 text-foreground",

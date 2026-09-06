@@ -45,4 +45,16 @@ describe("analyze", () => {
     const text = "Die Rechnung wurde geprüft und freigegeben.";
     expect(run(text).output).toBe(text);
   });
+
+  it("redacts companies with legal forms, clubs and institutions", () => {
+    const { output } = run(
+      "Die Muster GmbH arbeitet mit der Beispiel Holding AG zusammen. Gegründet wurde der FC Musterort, heute ein eingetragener Sportverein. Kunde ist auch die Aargauische Kantonalbank sowie Müller & Co. KG.",
+    );
+    expect(output).not.toContain("Muster GmbH");
+    expect(output).not.toContain("Beispiel Holding AG");
+    expect(output).not.toContain("FC Musterort");
+    expect(output).not.toContain("Aargauische Kantonalbank");
+    expect(output).not.toContain("Müller & Co. KG");
+    expect(output).toContain("[FIRMA 1]");
+  });
 });
