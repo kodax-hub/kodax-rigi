@@ -6,7 +6,8 @@ import kodaxIcon from "@/assets/kodax-white-icon.svg";
 import { Dropzone } from "@/components/Dropzone";
 import { CategoryControls } from "@/components/CategoryControls";
 import { SubjectPanel } from "@/components/SubjectPanel";
-import { OriginalPane, RedactedPane } from "@/components/TextPanes";
+import { OriginalPane, RedactedPane, type SelectionInfo } from "@/components/TextPanes";
+import { detectManual, dropOverlapping, type ManualTerm } from "@/lib/redaction/manual";
 import { analyze, applyRedaction, buildMatches, detectAll, resolveOverlaps, type RawMatch } from "@/lib/redaction/detect";
 import type { NerStatus } from "@/lib/ner/ner";
 import {
@@ -17,7 +18,7 @@ import {
   slugify,
   type Subject,
 } from "@/lib/redaction/export";
-import { DEFAULT_TOGGLES, type Category, type CategoryToggles } from "@/lib/redaction/types";
+import { CATEGORIES, DEFAULT_TOGGLES, type Category, type CategoryToggles } from "@/lib/redaction/types";
 import type { ExtractProgress } from "@/lib/extract/extract";
 
 const STORAGE_KEY = "anonymo.settings.v1";
@@ -38,6 +39,8 @@ export function AnonymizerApp() {
   const [nerRaw, setNerRaw] = useState<RawMatch[]>([]);
   const [nerStatus, setNerStatus] = useState<NerStatus>("idle");
   const [infoOpen, setInfoOpen] = useState(false);
+  const [manualTerms, setManualTerms] = useState<ManualTerm[]>([]);
+  const [selection, setSelection] = useState<SelectionInfo | null>(null);
 
   useEffect(() => {
     setSubject((s) => (s.uid ? s : { ...s, uid: generateUid() }));
@@ -70,11 +73,13 @@ export function AnonymizerApp() {
 
   const matches = useMemo(() => {
     if (!doc) return [];
-    if (nerRaw.length === 0) return analyze(doc.text, toggles, customTerms);
+    const manual = detectManual(doc.text, manualTerms);
+    if (nerRaw.length === 0 && manual.length === 0) return analyze(doc.text, toggles, customTerms);
     const rules = detectAll(doc.text, toggles, customTerms);
     const ai = nerRaw.filter((m) => toggles[m.category]);
-    return buildMatches(resolveOverlaps([...rules, ...ai]));
-  }, [doc, toggles, customTerms, nerRaw]);
+    const auto = dropOverlapping([...rules, ...ai], manual);
+    return buildMatches(resolveOverlaps([...manual, ...auto]));
+  }, [doc, toggles, customTerms, nerRaw, manualTerms]);
 
   const redacted = useMemo(
     () => (doc ? applyRedaction(doc.text, matches, disabled) : ""),
@@ -92,6 +97,7 @@ export function AnonymizerApp() {
     const texts: string[] = [];
     setDisabled(new Set());
     setNerRaw([]);
+    setManualTerms([]);
     try {
       for (const file of files) {
         setProgress({ stage: "pdf", message: `${file.name} wird gelesen…`, progress: 0 });
@@ -122,6 +128,26 @@ export function AnonymizerApp() {
   }, []);
 
   const activeCount = matches.filter((m) => !disabled.has(m.id)).length;
+
+  const assignSelection = useCallback(
+    (category: Category) => {
+      if (!selection) return;
+      const value = selection.value;
+      setManualTerms((prev) => {
+        if (prev.some((t) => t.value.toLowerCase() === value.toLowerCase())) {
+          return prev.map((t) =>
+            t.value.toLowerCase() === value.toLowerCase() ? { ...t, category } : t,
+          );
+        }
+        return [...prev, { id: `${Date.now()}-${value}`, value, category }];
+      });
+      setToggles((t) => (t[category] ? t : { ...t, [category]: true }));
+      setSelection(null);
+      window.getSelection()?.removeAllRanges();
+      toast.success(`„${value}" als ${CATEGORIES.find((c) => c.id === category)?.label} markiert`);
+    },
+    [selection],
+  );
 
 
   const exportBase = useMemo(() => {
@@ -190,6 +216,37 @@ export function AnonymizerApp() {
             customTerms={customTermsRaw}
             onCustomTerms={setCustomTermsRaw}
           />
+
+          {manualTerms.length > 0 && (
+            <div>
+              <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                Manuell zugeordnet
+              </h2>
+              <ul className="mt-3 space-y-1">
+                {manualTerms.map((t) => (
+                  <li
+                    key={t.id}
+                    className="flex items-center gap-2 rounded-sm border border-border px-2 py-1.5 text-xs"
+                  >
+                    <span className="flex-1 truncate text-foreground" title={t.value}>
+                      {t.value}
+                    </span>
+                    <span className="font-mono text-[10px] uppercase text-muted-foreground">
+                      {CATEGORIES.find((c) => c.id === t.category)?.placeholder}
+                    </span>
+                    <button
+                      type="button"
+                      aria-label={`Zuordnung für ${t.value} entfernen`}
+                      onClick={() => setManualTerms((prev) => prev.filter((x) => x.id !== t.id))}
+                      className="text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      <X className="size-3.5" aria-hidden />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </aside>
 
         <section className="space-y-6">
@@ -263,6 +320,7 @@ export function AnonymizerApp() {
                   onClick={() => {
                     setDoc(null);
                     setDisabled(new Set());
+                    setManualTerms([]);
                   }}
                   className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary"
                 >
@@ -273,13 +331,14 @@ export function AnonymizerApp() {
               <div className="grid gap-4 xl:grid-cols-2">
                 <div className="rounded-xl border border-border bg-card">
                   <h2 className="border-b border-border px-4 py-2 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                    Original – Fundstelle anklicken zum Abwählen
+                    Original – markieren zum Zuordnen, Fundstelle anklicken zum Abwählen
                   </h2>
                   <div className="max-h-[60vh] overflow-auto p-4">
                     <OriginalPane
                       text={doc.text}
                       matches={matches}
                       disabled={disabled}
+                      onSelect={setSelection}
                       onToggleMatch={(id) =>
                         setDisabled((prev) => {
                           const next = new Set(prev);
@@ -311,6 +370,38 @@ export function AnonymizerApp() {
           )}
         </section>
       </main>
+
+      {selection && doc && (
+        <div
+          className="fixed z-50 -translate-x-1/2 rounded-lg border border-border bg-card p-2 shadow-2xl"
+          style={{ left: selection.x, top: selection.y + 8 }}
+        >
+          <p className="max-w-[260px] truncate px-1 pb-2 font-mono text-[11px] text-muted-foreground">
+            „{selection.value}" ist …
+          </p>
+          <div className="flex max-w-[280px] flex-wrap gap-1">
+            {CATEGORIES.filter((c) => c.id !== "custom").map((c) => (
+              <button
+                key={c.id}
+                type="button"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => assignSelection(c.id)}
+                className="rounded-sm border border-border px-2 py-1 text-xs text-foreground transition-colors hover:bg-secondary"
+              >
+                {c.label}
+              </button>
+            ))}
+            <button
+              type="button"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => setSelection(null)}
+              className="rounded-sm px-2 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Abbrechen
+            </button>
+          </div>
+        </div>
+      )}
 
       {infoOpen && (
         <div
