@@ -216,6 +216,37 @@ export function AnonymizerApp() {
             customTerms={customTermsRaw}
             onCustomTerms={setCustomTermsRaw}
           />
+
+          {manualTerms.length > 0 && (
+            <div>
+              <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                Manuell zugeordnet
+              </h2>
+              <ul className="mt-3 space-y-1">
+                {manualTerms.map((t) => (
+                  <li
+                    key={t.id}
+                    className="flex items-center gap-2 rounded-sm border border-border px-2 py-1.5 text-xs"
+                  >
+                    <span className="flex-1 truncate text-foreground" title={t.value}>
+                      {t.value}
+                    </span>
+                    <span className="font-mono text-[10px] uppercase text-muted-foreground">
+                      {CATEGORIES.find((c) => c.id === t.category)?.placeholder}
+                    </span>
+                    <button
+                      type="button"
+                      aria-label={`Zuordnung für ${t.value} entfernen`}
+                      onClick={() => setManualTerms((prev) => prev.filter((x) => x.id !== t.id))}
+                      className="text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      <X className="size-3.5" aria-hidden />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </aside>
 
         <section className="space-y-6">
@@ -339,6 +370,38 @@ export function AnonymizerApp() {
           )}
         </section>
       </main>
+
+      {selection && doc && (
+        <div
+          className="fixed z-50 -translate-x-1/2 rounded-lg border border-border bg-card p-2 shadow-2xl"
+          style={{ left: selection.x, top: selection.y + 8 }}
+        >
+          <p className="max-w-[260px] truncate px-1 pb-2 font-mono text-[11px] text-muted-foreground">
+            „{selection.value}" ist …
+          </p>
+          <div className="flex max-w-[280px] flex-wrap gap-1">
+            {CATEGORIES.filter((c) => c.id !== "custom").map((c) => (
+              <button
+                key={c.id}
+                type="button"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => assignSelection(c.id)}
+                className="rounded-sm border border-border px-2 py-1 text-xs text-foreground transition-colors hover:bg-secondary"
+              >
+                {c.label}
+              </button>
+            ))}
+            <button
+              type="button"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => setSelection(null)}
+              className="rounded-sm px-2 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Abbrechen
+            </button>
+          </div>
+        </div>
+      )}
 
       {infoOpen && (
         <div
