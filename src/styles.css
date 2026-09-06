@@ -1,8 +1,16 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
 
 @custom-variant dark (&:is(.dark *));
+
+/*
+ * Kodax brand palette (aligned with Kodax Evolve website):
+ * marine / marine-deep blues, sand neutrals, gold accent.
+ * Dark-only app: the Kodax dark scheme is the default in :root.
+ */
 
 /*
  * Design system definition.
@@ -19,8 +27,13 @@
  */
 
 @theme inline {
-  --font-sans: ui-sans-serif, "Segoe UI", system-ui, -apple-system, sans-serif;
-  --font-mono: ui-monospace, "Cascadia Mono", SFMono-Regular, Menlo, monospace;
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --color-marine: var(--marine);
+  --color-marine-deep: var(--marine-deep);
+  --color-sand: var(--sand);
+  --color-gold: var(--gold);
+  --color-gold-deep: var(--gold-deep);
   --radius-sm: calc(var(--radius) - 4px);
 
   --radius-md: calc(var(--radius) - 2px);
@@ -65,41 +78,49 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(0.19 0.02 240);
-  --foreground: oklch(0.95 0.01 240);
-  --card: oklch(0.235 0.022 243);
-  --card-foreground: oklch(0.95 0.01 240);
-  --popover: oklch(0.235 0.022 243);
-  --popover-foreground: oklch(0.95 0.01 240);
-  --primary: oklch(0.78 0.13 185);
-  --primary-foreground: oklch(0.19 0.02 240);
-  --secondary: oklch(0.29 0.024 243);
-  --secondary-foreground: oklch(0.95 0.01 240);
-  --muted: oklch(0.29 0.024 243);
-  --muted-foreground: oklch(0.72 0.02 240);
-  --accent: oklch(0.78 0.15 75);
-  --accent-foreground: oklch(0.19 0.02 240);
+  /* Kodax brand tokens (from Kodax Evolve) */
+  --marine: oklch(0.30 0.055 256);
+  --marine-deep: oklch(0.21 0.04 259);
+  --marine-mid: oklch(0.42 0.065 252);
+  --sand: oklch(0.965 0.006 90);
+  --sand-2: oklch(0.94 0.007 85);
+  --sand-3: oklch(0.875 0.01 85);
+  --gold: oklch(0.81 0.1 80);
+  --gold-deep: oklch(0.73 0.11 74);
+
+  --radius: 0.125rem;
+  --background: var(--marine-deep);
+  --foreground: var(--sand);
+  --card: oklch(0.255 0.048 258);
+  --card-foreground: var(--sand);
+  --popover: oklch(0.255 0.048 258);
+  --popover-foreground: var(--sand);
+  --primary: var(--sand);
+  --primary-foreground: var(--marine-deep);
+  --secondary: var(--marine);
+  --secondary-foreground: var(--sand);
+  --muted: var(--marine);
+  --muted-foreground: var(--sand-3);
+  --accent: var(--gold);
+  --accent-foreground: var(--marine-deep);
   --destructive: oklch(0.63 0.2 25);
-  --destructive-foreground: oklch(0.97 0.01 240);
-  --border: oklch(0.33 0.025 243);
-  --input: oklch(0.26 0.022 243);
-  --ring: oklch(0.78 0.13 185);
-  --chart-1: oklch(0.78 0.13 185);
-  --chart-2: oklch(0.78 0.15 75);
-  --chart-3: oklch(0.65 0.14 300);
-  --chart-4: oklch(0.7 0.14 150);
-  --chart-5: oklch(0.68 0.16 25);
-  --sidebar: oklch(0.22 0.02 243);
-  --sidebar-foreground: oklch(0.95 0.01 240);
-  --sidebar-primary: oklch(0.78 0.13 185);
-  --sidebar-primary-foreground: oklch(0.19 0.02 240);
-  --sidebar-accent: oklch(0.29 0.024 243);
-  --sidebar-accent-foreground: oklch(0.95 0.01 240);
-  --sidebar-border: oklch(0.33 0.025 243);
-  --sidebar-ring: oklch(0.78 0.13 185);
-  --font-sans: ui-sans-serif, "Segoe UI", system-ui, -apple-system, sans-serif;
-  --font-mono: ui-monospace, "Cascadia Mono", SFMono-Regular, Menlo, monospace;
+  --destructive-foreground: var(--sand);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 18%);
+  --ring: var(--gold);
+  --chart-1: var(--gold);
+  --chart-2: oklch(0.65 0.14 300);
+  --chart-3: oklch(0.7 0.14 150);
+  --chart-4: oklch(0.68 0.16 25);
+  --chart-5: oklch(0.78 0.13 185);
+  --sidebar: var(--marine-deep);
+  --sidebar-foreground: var(--sand);
+  --sidebar-primary: var(--gold);
+  --sidebar-primary-foreground: var(--marine-deep);
+  --sidebar-accent: var(--marine);
+  --sidebar-accent-foreground: var(--sand);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: var(--gold);
 }
 
 

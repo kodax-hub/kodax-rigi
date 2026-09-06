@@ -8,7 +8,7 @@ function createWindow() {
     minWidth: 900,
     minHeight: 640,
     backgroundColor: "#141b22",
-    title: "Anonymo",
+    title: "Kodax Secure AI Rigi",
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,

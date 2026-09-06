@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Copy, Download, FileJson, Info, KeyRound, Loader2, ShieldCheck, Trash2, WifiOff, X } from "lucide-react";
 import { toast } from "sonner";
 
+import kodaxIcon from "@/assets/kodax-white-icon.svg";
 import { Dropzone } from "@/components/Dropzone";
 import { CategoryControls } from "@/components/CategoryControls";
 import { SubjectPanel } from "@/components/SubjectPanel";
@@ -149,18 +150,18 @@ export function AnonymizerApp() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-card/60">
+      <header className="border-b border-border bg-marine-deep/80">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-4 px-6 py-4">
-          <ShieldCheck className="size-6 text-primary" aria-hidden />
+          <img src={kodaxIcon} alt="Kodax Logo" className="h-8 w-auto" />
           <div className="flex-1">
-            <h1 className="font-mono text-lg font-semibold tracking-tight text-foreground">
-              Anonymo
+            <h1 className="text-lg font-medium tracking-tight text-foreground">
+              Kodax Secure AI <span className="text-gold">„Rigi“</span>
             </h1>
             <p className="text-xs text-muted-foreground">
-              Dokumente lokal einlesen und personenbezogene Daten ersetzen
+              (BERT-base multilingual NER · 110 Mio. Parameter · 8-bit quantisiert)
             </p>
           </div>
-          <span className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 font-mono text-xs text-muted-foreground">
+          <span className="inline-flex items-center gap-2 rounded-sm border border-gold/40 px-3 py-1 font-mono text-xs text-gold">
             <WifiOff className="size-3.5" aria-hidden /> 100 % offline
           </span>
           <button
@@ -323,11 +324,16 @@ export function AnonymizerApp() {
         >
           <div className="w-full max-w-xl rounded-2xl border border-border bg-card p-6 shadow-2xl">
             <div className="flex items-start justify-between gap-4">
-              <div>
-                <h2 className="font-mono text-lg font-semibold text-foreground">Anonymo</h2>
-                <p className="text-sm text-muted-foreground">
-                  Lokale PDF- und Bild-Anonymisierung
-                </p>
+              <div className="flex items-center gap-3">
+                <img src={kodaxIcon} alt="Kodax Logo" className="h-8 w-auto" />
+                <div>
+                  <h2 className="text-lg font-medium text-foreground">
+                    Kodax Secure AI <span className="text-gold">„Rigi“</span>
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    Lokale PDF- und Bild-Anonymisierung
+                  </p>
+                </div>
               </div>
               <button
                 type="button"
