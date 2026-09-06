@@ -149,18 +149,18 @@ export function AnonymizerApp() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-card/60">
+      <header className="border-b border-border bg-marine-deep/80">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-4 px-6 py-4">
-          <ShieldCheck className="size-6 text-primary" aria-hidden />
+          <img src={kodaxIcon} alt="Kodax Logo" className="h-8 w-auto" />
           <div className="flex-1">
-            <h1 className="font-mono text-lg font-semibold tracking-tight text-foreground">
-              Anonymo
+            <h1 className="text-lg font-medium tracking-tight text-foreground">
+              Kodax Secure AI <span className="text-gold">„Rigi“</span>
             </h1>
             <p className="text-xs text-muted-foreground">
-              Dokumente lokal einlesen und personenbezogene Daten ersetzen
+              (BERT-base multilingual NER · 110 Mio. Parameter · 8-bit quantisiert · 100 % offline)
             </p>
           </div>
-          <span className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 font-mono text-xs text-muted-foreground">
+          <span className="inline-flex items-center gap-2 rounded-sm border border-gold/40 px-3 py-1 font-mono text-xs text-gold">
             <WifiOff className="size-3.5" aria-hidden /> 100 % offline
           </span>
           <button
