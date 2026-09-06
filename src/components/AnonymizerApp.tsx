@@ -122,8 +122,6 @@ export function AnonymizerApp() {
   const activeCount = matches.filter((m) => !disabled.has(m.id)).length;
 
 
-  const activeCount = matches.filter((m) => !disabled.has(m.id)).length;
-
   const exportBase = useMemo(() => {
     const name = subject.label.trim() || subject.uid || "dokument";
     return `${slugify(name)}-${subject.uid || "ohne-uid"}`;
