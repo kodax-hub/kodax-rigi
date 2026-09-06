@@ -207,6 +207,8 @@ export function AnonymizerApp() {
               <div className="flex flex-wrap items-center gap-3">
                 <p className="flex-1 truncate font-mono text-xs text-muted-foreground">
                   {doc.fileName} · {activeCount} von {matches.length} Fundstellen ersetzt
+                  {nerStatus === "ready" && nerRaw.length > 0 && " · inkl. KI-Erkennung"}
+                  {nerStatus === "error" && " · KI nicht verfügbar"}
                 </p>
                 <button
                   type="button"
