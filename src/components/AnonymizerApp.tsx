@@ -437,6 +437,23 @@ export function AnonymizerApp() {
             </div>
 
             <div className="mt-6 space-y-5 text-sm text-foreground">
+              <section className="rounded-lg border border-gold/30 bg-gold/5 p-4">
+                <h3 className="mb-2 flex items-center gap-2 font-mono font-semibold text-gold">
+                  <WifiOff className="size-4" aria-hidden />
+                  Kein LLM – nur lokale Erkennung
+                </h3>
+                <p className="text-muted-foreground">
+                  Diese App enthält <strong className="text-foreground">kein grosses Sprachmodell (LLM)</strong>.
+                  Das lokale Modell erkennt lediglich Wörter als Personen, Firmen, Orte oder Daten
+                  und ersetzt sie. Es versteht keine Zusammenhänge, beantwortet keine Fragen und
+                  generiert keinen Text.
+                </p>
+                <p className="mt-2 text-muted-foreground">
+                  Der geplante Workflow: Dokument hier anonymisieren, exportieren und den
+                  bereinigten Text anschliessend in eine starke externe KI hochladen.
+                </p>
+              </section>
+
               <section>
                 <h3 className="mb-2 flex items-center gap-2 font-mono font-semibold text-primary">
                   <ShieldCheck className="size-4" aria-hidden />
