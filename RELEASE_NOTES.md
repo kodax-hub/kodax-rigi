@@ -32,9 +32,9 @@ All processing — text extraction, OCR, and personal-data detection — happens
 2. Extract it and move `KodaxSecureAIRigi.app` to your **Applications** folder
 3. On first launch macOS may show "KodaxSecureAIRigi.app is damaged" because the app is not signed with an Apple certificate. Fix this once by opening **Terminal** and running:
 
-   ```sh
-   xattr -cr /Applications/KodaxSecureAIRigi.app
-   ```
+    ```sh
+    xattr -cr /Applications/KodaxSecureAIRigi.app
+    ```
 
 4. Launch the app normally. This step is only required once.
 
