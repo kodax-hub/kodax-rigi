@@ -586,21 +586,21 @@ export function AnonymizerApp() {
 
                 <div className="mt-4 grid gap-2 sm:grid-cols-3">
                   <a
-                    href="https://github.com/kodax-hub/kodax-rigi/releases/download/1.0.1/KodaxSecureAIRigi-win32-x64.zip"
+                    href="https://github.com/kodax-hub/kodax-rigi/releases/download/1.0.1/KodaxSecureAIRigi-Windows-x64.1.zip"
                     download
                     className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
                   >
                     <Download className="size-4" aria-hidden /> Windows
                   </a>
                   <a
-                    href="https://github.com/kodax-hub/kodax-rigi/releases/download/1.0.1/KodaxSecureAIRigi-darwin-arm64.zip"
+                    href="https://github.com/kodax-hub/kodax-rigi/releases/download/1.0.1/KodaxSecureAIRigi-macOS-AppleSilicon.1.zip"
                     download
                     className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
                   >
                     <Download className="size-4" aria-hidden /> Mac (Apple Silicon)
                   </a>
                   <a
-                    href="https://github.com/kodax-hub/kodax-rigi/releases/download/1.0.1/KodaxSecureAIRigi-darwin-x64.zip"
+                    href="https://github.com/kodax-hub/kodax-rigi/releases/download/1.0.1/KodaxSecureAIRigi-macOS-Intel.1.zip"
                     download
                     className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
                   >
