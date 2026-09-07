@@ -446,6 +446,36 @@ export function AnonymizerApp() {
               </button>
             </div>
 
+            <div className="mt-5 flex gap-2" role="tablist" aria-label="Informationsbereiche">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={infoTab === "modell"}
+                onClick={() => setInfoTab("modell")}
+                className={`flex-1 rounded-lg border px-3 py-2 font-mono text-xs font-semibold transition-colors ${
+                  infoTab === "modell"
+                    ? "border-gold/50 bg-gold/10 text-gold"
+                    : "border-border text-muted-foreground hover:bg-secondary hover:text-foreground"
+                }`}
+              >
+                Modell &amp; Datenschutz
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={infoTab === "install"}
+                onClick={() => setInfoTab("install")}
+                className={`flex-1 rounded-lg border px-3 py-2 font-mono text-xs font-semibold transition-colors ${
+                  infoTab === "install"
+                    ? "border-gold/50 bg-gold/10 text-gold"
+                    : "border-border text-muted-foreground hover:bg-secondary hover:text-foreground"
+                }`}
+              >
+                Installation
+              </button>
+            </div>
+
+            {infoTab === "modell" && (
             <div className="mt-6 space-y-5 text-sm text-foreground">
               <section className="rounded-lg border border-gold/30 bg-gold/5 p-4">
                 <h3 className="mb-2 flex items-center gap-2 font-mono font-semibold text-gold">
