@@ -193,7 +193,16 @@ export function AnonymizerApp() {
           </span>
           <button
             type="button"
-            onClick={() => setInfoOpen(true)}
+            onClick={() => { setInfoTab("install"); setInfoOpen(true); }}
+            className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+            aria-label="Installation: App auf diesem Gerät einrichten"
+          >
+            <MonitorDown className="size-4 pointer-events-none" aria-hidden />
+            Installieren
+          </button>
+          <button
+            type="button"
+            onClick={() => { setInfoTab("modell"); setInfoOpen(true); }}
             className="inline-flex items-center justify-center rounded-full border border-border p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
             aria-label="Informationen zur App und zum KI-Modell"
           >
