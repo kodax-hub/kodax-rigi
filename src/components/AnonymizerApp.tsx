@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Copy, Download, FileJson, Info, KeyRound, Loader2, ShieldCheck, Trash2, WifiOff, X } from "lucide-react";
+import { Copy, Download, FileJson, Info, KeyRound, Loader2, MonitorDown, ShieldCheck, Trash2, WifiOff, X } from "lucide-react";
 import { toast } from "sonner";
 
 import kodaxIcon from "@/assets/kodax-white-icon.svg";
@@ -188,7 +188,7 @@ export function AnonymizerApp() {
             </p>
           </div>
           <span className="inline-flex items-center gap-2 rounded-sm border border-gold/40 px-3 py-1 font-mono text-xs text-gold">
-            <WifiOff className="size-3.5" aria-hidden /> 100 % offline
+            <ShieldCheck className="size-3.5" aria-hidden /> Verarbeitung lokal
           </span>
           <button
             type="button"
@@ -490,11 +490,33 @@ export function AnonymizerApp() {
               </section>
 
               <section>
-                <h3 className="mb-2 font-mono font-semibold text-primary">100 % offline</h3>
+                <h3 className="mb-2 font-mono font-semibold text-primary">Lokal und geschützt</h3>
                 <p className="text-muted-foreground">
-                  Alle Berechnungen laufen lokal in deinem Browser oder in der Desktop-App. Weder
-                  das Dokument noch das KI-Modell laden etwas aus der Cloud hoch oder aus dem
-                  Internet herunter.
+                  Die Dokumente und deren Inhalte werden nicht an einen Server übermittelt. Die
+                  Erkennung und Anonymisierung laufen direkt auf deinem Gerät. Die Desktop-App
+                  funktioniert vollständig offline; die Web-Version benötigt zum Öffnen und zum
+                  Laden der lokalen Werkzeuge eine Internetverbindung.
+                </p>
+              </section>
+
+              <section className="border-t border-border pt-5">
+                <h3 className="mb-3 flex items-center gap-2 font-mono font-semibold text-primary">
+                  <MonitorDown className="size-4" aria-hidden />
+                  Web-App installieren
+                </h3>
+                <p className="text-muted-foreground">
+                  Öffne <strong className="text-foreground">rigi.kodax.cloud</strong> im Browser.
+                  Die installierte Web-App verwendet das Kodax-Symbol und öffnet sich danach in
+                  einem eigenen Fenster.
+                </p>
+                <ul className="mt-3 space-y-2 text-muted-foreground">
+                  <li><strong className="text-foreground">Windows / Chrome oder Edge:</strong> In der Adresszeile auf das Installationssymbol klicken oder im Browser-Menü „App installieren“ wählen.</li>
+                  <li><strong className="text-foreground">Mac / Safari:</strong> „Ablage“ → „Zum Dock hinzufügen“ wählen.</li>
+                  <li><strong className="text-foreground">iPhone / iPad:</strong> In Safari „Teilen“ → „Zum Home-Bildschirm“ wählen.</li>
+                  <li><strong className="text-foreground">Android:</strong> Im Browser-Menü „App installieren“ oder „Zum Startbildschirm hinzufügen“ wählen.</li>
+                </ul>
+                <p className="mt-3 text-xs text-muted-foreground">
+                  Für garantierte Nutzung ohne Internet verwende weiterhin die herunterladbare Desktop-App.
                 </p>
               </section>
 

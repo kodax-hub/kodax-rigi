@@ -18,6 +18,10 @@ export const Route = createFileRoute("/")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "theme-color", content: "#18283e" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://rigi.kodax.cloud/" },
     ],
   }),
   component: AnonymizerApp,
