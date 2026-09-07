@@ -15,7 +15,7 @@
     "desktop:start": "electron .",
     "desktop:pack": "npm run desktop:build && electron-packager . KodaxSecureAIRigi --platform=win32,darwin --arch=x64,arm64 --out=electron-release --overwrite --ignore=node_modules --ignore=^/src --ignore=^/public --ignore=^/electron-release --ignore=^/\\.lovable --ignore=^/\\.workspace --ignore=^/\\.agents --ignore=^/\\.claude --ignore=^/AGENTS.md --ignore=^/bun.lock --ignore=^/README.md --prune=true",
     "test": "vitest run"
-  }
+  },
   "overrides": {
     "rolldown": "1.2.1"
   },
