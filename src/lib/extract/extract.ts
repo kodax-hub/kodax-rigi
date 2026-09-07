@@ -11,7 +11,9 @@ export type ProgressFn = (p: ExtractProgress) => void;
 const TESS_BASE = "/tesseract";
 
 async function getPdfjs() {
-  const pdfjs = await import("pdfjs-dist");
+  // Legacy-Build: enthält Polyfills (z. B. Map.getOrInsertComputed), damit
+  // PDFs auch in etwas älteren Browsern zuverlässig gelesen werden.
+  const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs");
   pdfjs.GlobalWorkerOptions.workerSrc = "/pdfjs/pdf.worker.min.mjs";
   return pdfjs;
 }
