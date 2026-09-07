@@ -540,27 +540,6 @@ export function AnonymizerApp() {
               </section>
 
               <section className="border-t border-border pt-5">
-                <h3 className="mb-3 flex items-center gap-2 font-mono font-semibold text-primary">
-                  <MonitorDown className="size-4" aria-hidden />
-                  Web-App installieren
-                </h3>
-                <p className="text-muted-foreground">
-                  Öffne <strong className="text-foreground">rigi.kodax.cloud</strong> im Browser.
-                  Die installierte Web-App verwendet das Kodax-Symbol und öffnet sich danach in
-                  einem eigenen Fenster.
-                </p>
-                <ul className="mt-3 space-y-2 text-muted-foreground">
-                  <li><strong className="text-foreground">Windows / Chrome oder Edge:</strong> In der Adresszeile auf das Installationssymbol klicken oder im Browser-Menü „App installieren“ wählen.</li>
-                  <li><strong className="text-foreground">Mac / Safari:</strong> „Ablage“ → „Zum Dock hinzufügen“ wählen.</li>
-                  <li><strong className="text-foreground">iPhone / iPad:</strong> In Safari „Teilen“ → „Zum Home-Bildschirm“ wählen.</li>
-                  <li><strong className="text-foreground">Android:</strong> Im Browser-Menü „App installieren“ oder „Zum Startbildschirm hinzufügen“ wählen.</li>
-                </ul>
-                <p className="mt-3 text-xs text-muted-foreground">
-                  Für garantierte Nutzung ohne Internet verwende weiterhin die herunterladbare Desktop-App.
-                </p>
-              </section>
-
-              <section>
                 <h3 className="mb-2 font-mono font-semibold text-primary">Wichtiger Hinweis</h3>
                 <p className="text-muted-foreground">
                   Keine automatische Erkennung ist perfekt. Prüfe das Ergebnis vor dem Weitergeben
