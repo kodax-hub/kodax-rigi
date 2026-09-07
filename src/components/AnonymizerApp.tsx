@@ -39,6 +39,7 @@ export function AnonymizerApp() {
   const [nerRaw, setNerRaw] = useState<RawMatch[]>([]);
   const [nerStatus, setNerStatus] = useState<NerStatus>("idle");
   const [infoOpen, setInfoOpen] = useState(false);
+  const [infoTab, setInfoTab] = useState<"modell" | "install">("modell");
   const [manualTerms, setManualTerms] = useState<ManualTerm[]>([]);
   const [selection, setSelection] = useState<SelectionInfo | null>(null);
 
@@ -192,7 +193,16 @@ export function AnonymizerApp() {
           </span>
           <button
             type="button"
-            onClick={() => setInfoOpen(true)}
+            onClick={() => { setInfoTab("install"); setInfoOpen(true); }}
+            className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+            aria-label="Installation: App auf diesem Gerät einrichten"
+          >
+            <MonitorDown className="size-4 pointer-events-none" aria-hidden />
+            Installieren
+          </button>
+          <button
+            type="button"
+            onClick={() => { setInfoTab("modell"); setInfoOpen(true); }}
             className="inline-flex items-center justify-center rounded-full border border-border p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
             aria-label="Informationen zur App und zum KI-Modell"
           >
@@ -436,6 +446,36 @@ export function AnonymizerApp() {
               </button>
             </div>
 
+            <div className="mt-5 flex gap-2" role="tablist" aria-label="Informationsbereiche">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={infoTab === "modell"}
+                onClick={() => setInfoTab("modell")}
+                className={`flex-1 rounded-lg border px-3 py-2 font-mono text-xs font-semibold transition-colors ${
+                  infoTab === "modell"
+                    ? "border-gold/50 bg-gold/10 text-gold"
+                    : "border-border text-muted-foreground hover:bg-secondary hover:text-foreground"
+                }`}
+              >
+                Modell &amp; Datenschutz
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={infoTab === "install"}
+                onClick={() => setInfoTab("install")}
+                className={`flex-1 rounded-lg border px-3 py-2 font-mono text-xs font-semibold transition-colors ${
+                  infoTab === "install"
+                    ? "border-gold/50 bg-gold/10 text-gold"
+                    : "border-border text-muted-foreground hover:bg-secondary hover:text-foreground"
+                }`}
+              >
+                Installation
+              </button>
+            </div>
+
+            {infoTab === "modell" && (
             <div className="mt-6 space-y-5 text-sm text-foreground">
               <section className="rounded-lg border border-gold/30 bg-gold/5 p-4">
                 <h3 className="mb-2 flex items-center gap-2 font-mono font-semibold text-gold">
@@ -500,27 +540,6 @@ export function AnonymizerApp() {
               </section>
 
               <section className="border-t border-border pt-5">
-                <h3 className="mb-3 flex items-center gap-2 font-mono font-semibold text-primary">
-                  <MonitorDown className="size-4" aria-hidden />
-                  Web-App installieren
-                </h3>
-                <p className="text-muted-foreground">
-                  Öffne <strong className="text-foreground">rigi.kodax.cloud</strong> im Browser.
-                  Die installierte Web-App verwendet das Kodax-Symbol und öffnet sich danach in
-                  einem eigenen Fenster.
-                </p>
-                <ul className="mt-3 space-y-2 text-muted-foreground">
-                  <li><strong className="text-foreground">Windows / Chrome oder Edge:</strong> In der Adresszeile auf das Installationssymbol klicken oder im Browser-Menü „App installieren“ wählen.</li>
-                  <li><strong className="text-foreground">Mac / Safari:</strong> „Ablage“ → „Zum Dock hinzufügen“ wählen.</li>
-                  <li><strong className="text-foreground">iPhone / iPad:</strong> In Safari „Teilen“ → „Zum Home-Bildschirm“ wählen.</li>
-                  <li><strong className="text-foreground">Android:</strong> Im Browser-Menü „App installieren“ oder „Zum Startbildschirm hinzufügen“ wählen.</li>
-                </ul>
-                <p className="mt-3 text-xs text-muted-foreground">
-                  Für garantierte Nutzung ohne Internet verwende weiterhin die herunterladbare Desktop-App.
-                </p>
-              </section>
-
-              <section>
                 <h3 className="mb-2 font-mono font-semibold text-primary">Wichtiger Hinweis</h3>
                 <p className="text-muted-foreground">
                   Keine automatische Erkennung ist perfekt. Prüfe das Ergebnis vor dem Weitergeben
@@ -528,6 +547,78 @@ export function AnonymizerApp() {
                 </p>
               </section>
             </div>
+            )}
+
+            {infoTab === "install" && (
+            <div className="mt-6 space-y-6 text-sm text-foreground">
+              <section className="rounded-lg border border-border bg-background p-4">
+                <h3 className="mb-1 flex items-center gap-2 font-mono font-semibold text-primary">
+                  <MonitorDown className="size-4" aria-hidden />
+                  Variante 1: Web-App (empfohlen)
+                </h3>
+                <p className="text-muted-foreground">
+                  Kein Download nötig. Die App wird mit Kodax-Symbol installiert und öffnet sich
+                  danach in einem eigenen Fenster. Zum ersten Öffnen und Laden der Werkzeuge ist
+                  eine Internetverbindung nötig.
+                </p>
+                <ol className="mt-3 list-decimal space-y-2 pl-5 text-muted-foreground">
+                  <li>Öffne <strong className="text-foreground">rigi.kodax.cloud</strong> im Browser.</li>
+                  <li>
+                    Installieren:
+                    <ul className="mt-1.5 list-disc space-y-1 pl-5">
+                      <li><strong className="text-foreground">Windows (Chrome / Edge):</strong> Installationssymbol in der Adresszeile klicken oder im Menü „App installieren“ wählen.</li>
+                      <li><strong className="text-foreground">Mac (Safari):</strong> „Ablage“ → „Zum Dock hinzufügen“.</li>
+                      <li><strong className="text-foreground">iPhone / iPad:</strong> In Safari „Teilen“ → „Zum Home-Bildschirm“.</li>
+                      <li><strong className="text-foreground">Android:</strong> Im Browser-Menü „App installieren“ wählen.</li>
+                    </ul>
+                  </li>
+                  <li>Die App erscheint mit dem Kodax-Symbol in deinen Programmen / auf dem Home-Bildschirm.</li>
+                </ol>
+              </section>
+
+              <section className="rounded-lg border border-border bg-background p-4">
+                <h3 className="mb-1 font-mono font-semibold text-primary">
+                  Variante 2: Desktop-App (100 % offline)
+                </h3>
+                <p className="text-muted-foreground">
+                  Läuft garantiert ohne Internet. Lade das passende Paket für dein System aus dem
+                  bereitgestellten Download-Link (GitHub Release) herunter.
+                </p>
+
+                <p className="mt-3 font-mono text-xs font-semibold text-foreground">Windows</p>
+                <ol className="mt-1.5 list-decimal space-y-1 pl-5 text-muted-foreground">
+                  <li>ZIP-Datei „…Windows.zip“ herunterladen und entpacken.</li>
+                  <li>Im entpackten Ordner „KodaxSecureAIRigi.exe“ doppelklicken.</li>
+                  <li>Falls Windows eine blaue Schutzmeldung zeigt: „Weitere Informationen“ → „Trotzdem ausführen“.</li>
+                </ol>
+
+                <p className="mt-4 font-mono text-xs font-semibold text-foreground">Mac (Apple Silicon / Intel)</p>
+                <ol className="mt-1.5 list-decimal space-y-1 pl-5 text-muted-foreground">
+                  <li>Passende ZIP-Datei herunterladen und entpacken.</li>
+                  <li>Die App in den Ordner „Programme“ (Applications) bewegen.</li>
+                  <li>
+                    Beim ersten Start meldet macOS eventuell „App ist beschädigt“. Das ist der
+                    Standard-Schutz für unsignierte Apps. Einmalig beheben: „Terminal“ öffnen und
+                    eingeben:
+                    <code className="mt-1.5 block rounded border border-border bg-card px-2.5 py-1.5 font-mono text-xs text-gold">
+                      xattr -cr /Applications/KodaxSecureAIRigi.app
+                    </code>
+                  </li>
+                  <li>Danach startet die App normal per Doppelklick.</li>
+                </ol>
+              </section>
+
+              <section>
+                <h3 className="mb-2 font-mono font-semibold text-primary">Danach: Dokument anonymisieren</h3>
+                <ol className="list-decimal space-y-1.5 pl-5 text-muted-foreground">
+                  <li>PDF oder Bild in die App ziehen.</li>
+                  <li>Erkannte persönliche Daten prüfen, Fundstellen bei Bedarf an-/abwählen.</li>
+                  <li>Bereinigten Text kopieren oder als Datei speichern.</li>
+                  <li>Den anonymisierten Text in deine starke KI hochladen.</li>
+                </ol>
+              </section>
+            </div>
+            )}
           </div>
         </div>
       )}
