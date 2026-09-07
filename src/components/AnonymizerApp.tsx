@@ -429,7 +429,7 @@ export function AnonymizerApp() {
                 <img src={kodaxIcon} alt="Kodax Logo" className="h-8 w-auto" />
                 <div>
                   <h2 className="text-lg font-medium text-foreground">
-                    Kodax Secure AI <span className="text-gold">„Rigi“</span>
+                    Kodax Secure AI <span className="text-gold">„Rigi"</span>
                   </h2>
                   <p className="text-sm text-muted-foreground">
                     Lokale PDF- und Bild-Anonymisierung
@@ -566,10 +566,10 @@ export function AnonymizerApp() {
                   <li>
                     Installieren:
                     <ul className="mt-1.5 list-disc space-y-1 pl-5">
-                      <li><strong className="text-foreground">Windows (Chrome / Edge):</strong> Installationssymbol in der Adresszeile klicken oder im Menü „App installieren“ wählen.</li>
-                      <li><strong className="text-foreground">Mac (Safari):</strong> „Ablage“ → „Zum Dock hinzufügen“.</li>
-                      <li><strong className="text-foreground">iPhone / iPad:</strong> In Safari „Teilen“ → „Zum Home-Bildschirm“.</li>
-                      <li><strong className="text-foreground">Android:</strong> Im Browser-Menü „App installieren“ wählen.</li>
+                      <li><strong className="text-foreground">Windows (Chrome / Edge):</strong> Installationssymbol in der Adresszeile klicken oder im Menü „App installieren" wählen.</li>
+                      <li><strong className="text-foreground">Mac (Safari):</strong> „Ablage" → „Zum Dock hinzufügen".</li>
+                      <li><strong className="text-foreground">iPhone / iPad:</strong> In Safari „Teilen" → „Zum Home-Bildschirm".</li>
+                      <li><strong className="text-foreground">Android:</strong> Im Browser-Menü „App installieren" wählen.</li>
                     </ul>
                   </li>
                   <li>Die App erscheint mit dem Kodax-Symbol in deinen Programmen / auf dem Home-Bildschirm.</li>
@@ -581,24 +581,47 @@ export function AnonymizerApp() {
                   Variante 2: Desktop-App (100 % offline)
                 </h3>
                 <p className="text-muted-foreground">
-                  Läuft garantiert ohne Internet. Lade das passende Paket für dein System aus dem
-                  bereitgestellten Download-Link (GitHub Release) herunter.
+                  Läuft garantiert ohne Internet. Lade das passende Paket für dein System herunter:
                 </p>
+
+                <div className="mt-4 grid gap-2 sm:grid-cols-3">
+                  <a
+                    href="https://github.com/kodax-hub/kodax-rigi/releases/download/1.0.1/KodaxSecureAIRigi-win32-x64.zip"
+                    download
+                    className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
+                  >
+                    <Download className="size-4" aria-hidden /> Windows
+                  </a>
+                  <a
+                    href="https://github.com/kodax-hub/kodax-rigi/releases/download/1.0.1/KodaxSecureAIRigi-darwin-arm64.zip"
+                    download
+                    className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
+                  >
+                    <Download className="size-4" aria-hidden /> Mac (Apple Silicon)
+                  </a>
+                  <a
+                    href="https://github.com/kodax-hub/kodax-rigi/releases/download/1.0.1/KodaxSecureAIRigi-darwin-x64.zip"
+                    download
+                    className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
+                  >
+                    <Download className="size-4" aria-hidden /> Mac (Intel)
+                  </a>
+                </div>
 
                 <p className="mt-3 font-mono text-xs font-semibold text-foreground">Windows</p>
                 <ol className="mt-1.5 list-decimal space-y-1 pl-5 text-muted-foreground">
-                  <li>ZIP-Datei „…Windows.zip“ herunterladen und entpacken.</li>
-                  <li>Im entpackten Ordner „KodaxSecureAIRigi.exe“ doppelklicken.</li>
-                  <li>Falls Windows eine blaue Schutzmeldung zeigt: „Weitere Informationen“ → „Trotzdem ausführen“.</li>
+                  <li>ZIP-Datei herunterladen und entpacken.</li>
+                  <li>Im entpackten Ordner „KodaxSecureAIRigi.exe" doppelklicken.</li>
+                  <li>Falls Windows eine blaue Schutzmeldung zeigt: „Weitere Informationen" → „Trotzdem ausführen".</li>
                 </ol>
 
                 <p className="mt-4 font-mono text-xs font-semibold text-foreground">Mac (Apple Silicon / Intel)</p>
                 <ol className="mt-1.5 list-decimal space-y-1 pl-5 text-muted-foreground">
                   <li>Passende ZIP-Datei herunterladen und entpacken.</li>
-                  <li>Die App in den Ordner „Programme“ (Applications) bewegen.</li>
+                  <li>Die App in den Ordner „Programme" (Applications) bewegen.</li>
                   <li>
-                    Beim ersten Start meldet macOS eventuell „App ist beschädigt“. Das ist der
-                    Standard-Schutz für unsignierte Apps. Einmalig beheben: „Terminal“ öffnen und
+                    Beim ersten Start meldet macOS eventuell „App ist beschädigt". Das ist der
+                    Standard-Schutz für unsignierte Apps. Einmalig beheben: „Terminal" öffnen und
                     eingeben:
                     <code className="mt-1.5 block rounded border border-border bg-card px-2.5 py-1.5 font-mono text-xs text-gold">
                       xattr -cr /Applications/KodaxSecureAIRigi.app
