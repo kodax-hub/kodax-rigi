@@ -39,6 +39,7 @@ export function AnonymizerApp() {
   const [nerRaw, setNerRaw] = useState<RawMatch[]>([]);
   const [nerStatus, setNerStatus] = useState<NerStatus>("idle");
   const [infoOpen, setInfoOpen] = useState(false);
+  const [infoTab, setInfoTab] = useState<"modell" | "install">("modell");
   const [manualTerms, setManualTerms] = useState<ManualTerm[]>([]);
   const [selection, setSelection] = useState<SelectionInfo | null>(null);
 
