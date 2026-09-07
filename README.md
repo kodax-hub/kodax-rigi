@@ -1,29 +1,33 @@
-# Welcome to your Lovable project
+# Kodax Secure AI „Rigi"
 
-This project was built with [Lovable](https://lovable.dev).
+Offline-Desktop-App zur Anonymisierung von Dokumenten.
 
-## Build with Lovable
+PDFs und Bilder werden lokal in Text umgewandelt, persönliche Daten (Namen, Adressen,
+E-Mail-Adressen, Telefonnummern, IBANs, Geburtsdaten u. a.) werden erkannt und ersetzt.
+Die anonymisierte Fassung kann anschliessend gefahrlos an eine externe KI übergeben werden.
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+Die App arbeitet vollständig offline – es werden keine Daten übertragen.
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+## Entwicklung
 
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+Voraussetzung: Node.js und npm.
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
 npm i
 npm run dev
 ```
 
-## Built with
+## Desktop-Pakete bauen
 
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
+```sh
+npm run build
+npx vite build --config electron/vite.electron.config.ts
+```
+
+## Verwendete Technik
+
+- TanStack Start, React, TypeScript, Tailwind CSS
+- Electron für die Desktop-Pakete (Windows, macOS)
+- Lokale Texterkennung (OCR) und lokales Erkennungsmodell – ohne Netzwerkzugriff
+
+© Kodax
