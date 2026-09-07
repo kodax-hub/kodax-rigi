@@ -1,0 +1,26 @@
+{
+  "id": "/",
+  "name": "Kodax Secure AI Rigi",
+  "short_name": "Rigi",
+  "description": "PDFs und Bilder lokal in Text umwandeln und sensible Daten anonymisieren.",
+  "lang": "de-CH",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#18283e",
+  "theme_color": "#18283e",
+  "icons": [
+    {
+      "src": "/kodax-app-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/kodax-app-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
