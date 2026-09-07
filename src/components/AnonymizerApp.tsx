@@ -413,7 +413,7 @@ export function AnonymizerApp() {
             if (e.target === e.currentTarget) setInfoOpen(false);
           }}
         >
-          <div className="w-full max-w-xl rounded-2xl border border-border bg-card p-6 shadow-2xl">
+          <div className="max-h-[calc(100vh-6rem)] w-full max-w-xl overflow-y-auto rounded-2xl border border-border bg-card p-6 shadow-2xl">
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-center gap-3">
                 <img src={kodaxIcon} alt="Kodax Logo" className="h-8 w-auto" />
