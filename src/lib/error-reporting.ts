@@ -14,8 +14,8 @@ type HostEvents = {
 
 declare global {
   interface Window {
-    __lovableEvents?: HostEvents;
-    __lovableReportRuntimeError?: (payload: {
+    __hostEvents?: HostEvents;
+    __reportRuntimeError?: (payload: {
       message: string;
       stack?: string;
       filename?: string;
@@ -25,7 +25,7 @@ declare global {
 
 export function reportAppError(error: unknown, context: Record<string, unknown> = {}) {
   if (typeof window === "undefined") return;
-  window.__lovableEvents?.captureException?.(
+  window.__hostEvents?.captureException?.(
     error,
     {
       source: "react_error_boundary",
@@ -50,7 +50,7 @@ export function reportAppError(error: unknown, context: Record<string, unknown> 
         ? error.message
         : String(error);
   const stack = error instanceof Error ? error.stack : undefined;
-  window.__lovableReportRuntimeError?.({
+  window.__reportRuntimeError?.({
     message,
     ...(stack !== undefined && { stack }),
     filename: window.location.pathname,

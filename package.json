@@ -1,5 +1,6 @@
 {
-  "name": "tanstack_start_ts",
+  "name": "secure-ai-rigi",
+  "version": "1.0.0",
   "private": true,
   "sideEffects": false,
   "type": "module",
@@ -12,9 +13,9 @@
     "format": "prettier --write .",
     "desktop:build": "vite build --config electron/vite.electron.config.ts",
     "desktop:start": "electron .",
-    "desktop:pack": "npm run desktop:build && electron-packager . KodaxSecureAIRigi --platform=win32,darwin --arch=x64 --out=electron-release --overwrite --ignore=node_modules --ignore=^/src --ignore=^/public --ignore=^/electron-release",
+    "desktop:pack": "npm run desktop:build && electron-packager . KodaxSecureAIRigi --platform=win32,darwin --arch=x64,arm64 --out=electron-release --overwrite --ignore=node_modules --ignore=^/src --ignore=^/public --ignore=^/electron-release --ignore=^/\\.lovable --ignore=^/\\.workspace --ignore=^/\\.agents --ignore=^/\\.claude --ignore=^/AGENTS.md --ignore=^/bun.lock --ignore=^/README.md --prune=true",
     "test": "vitest run"
-  },
+  }
   "overrides": {
     "rolldown": "1.2.1"
   },
